@@ -8,7 +8,7 @@ export function useNotes() {
     const [notes, setNotes] = useState(() => {
         const saved = localStorage.getItem(STORAGE_KEY)
         console.log(saved)
-        if(!saved) return []
+        if(!saved) return [{title: "Какой-то заголовок", text: "Какой-то текст"}]
 
         try {
             const parsed = JSON.parse(saved)

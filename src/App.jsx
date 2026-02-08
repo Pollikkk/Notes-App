@@ -10,23 +10,23 @@ function App() {
   console.log("useNotes is", useNotes);
   const [notes, setNotes] = useNotes();
 
-  const [newNote, setNewNote] = useState({title: "", text: ""})
+  const [newNote, setNewNote] = useState({title: "", text: "", images: []})
   const [isOpenNewNote, setIsOpenNewNote] = useState(false)
 
   const addNote = () => {
     if(newNote.title && newNote.text){
       const newId = Date.now().toString()
-      setNotes([...notes, {...newNote, id: newId}])
-      setNewNote({title: "", text: ""})
+      setNotes(prev => [...prev, { ...newNote, id: newId }]);
+      setNewNote({title: "", text: "", images: []})
     }
   }
   const deleteNote = (id) => {
     const updateNotes = notes.filter((n) => n.id !== id)
     setNotes(updateNotes)
   }
-  const updateNote = (id, newTitle, newText) => {
+  const updateNote = (id, newTitle, newText, newImages) => {
     const updatedNotes = notes.map((note) => 
-      note.id == id ? {...note, title: newTitle, text: newText} : note
+      note.id == id ? {...note, title: newTitle, text: newText, images: newImages ?? []} : note
     )
     setNotes(updatedNotes)
   }

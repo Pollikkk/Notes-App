@@ -9,14 +9,39 @@ function Note({CurNote}) {
     const [isEditing, setIsEditing] = useState(false);
     const [editedText, setEditedText] = useState({
         title: CurNote.title, 
-        text: CurNote.text
+        text: CurNote.text,
+        images: CurNote.images ?? []
     });
 
     const handleEdit = () => setIsEditing(true)
 
+    const readAsDataURL = (file) =>
+        new Promise((resolve, reject) => {
+            const fr = new FileReader();
+            fr.onload = () => resolve(fr.result);
+            fr.onerror = reject;
+            fr.readAsDataURL(file); 
+        });
+
     const handleSave = () => {
-      updateNote(CurNote.id, editedText.title, editedText.text)
-      setIsEditing(false)
+        updateNote(CurNote.id, editedText.title, editedText.text, editedText.images)
+        setIsEditing(false)
+    };
+
+    const handleAddImagesEdit = async (e) => {
+        const files = Array.from(e.target.files ?? []);
+        if (!files.length) return;
+
+        const dataUrls = await Promise.all(files.map(readAsDataURL));
+        setEditedText(prev => ({ ...prev, images: [...(prev.images ?? []), ...dataUrls] }));
+        e.target.value = "";
+    };
+
+    const removeEditedImage = (index) => {
+        setEditedText(prev => ({
+            ...prev,
+            images: prev.images.filter((_, i) => i !== index)
+        }));
     };
 
     useEffect(() => {
@@ -51,11 +76,27 @@ function Note({CurNote}) {
                           value={editedText.text}
                           onChange={(e) => setEditedText(prev => ({...prev, text: e.target.value}))}
                         />
+                        <div className="noteImages">
+                            {(editedText.images ?? []).map((src, i) => (
+                                <div key={i}>
+                                    <img src={src} alt="" style={{ maxWidth: 160 }} />
+                                    <button onClick={() => removeEditedImage(i)}>Удалить</button>
+                                </div>
+                            ))}
+                        </div>
+                        <input type="file" accept="image/*" multiple onChange={handleAddImagesEdit} />
                     </>
                 ) : (
                     <>
                         <div className="oneNoteTitle">{CurNote.title}</div>
                         <div className="oneNoteText">{CurNote.text}</div>
+                        {(CurNote.images ?? []).length > 0 && (
+                            <div className="noteImages">
+                                {CurNote.images.map((src, i) => (
+                                    <img key={i} src={src} alt="" style={{ maxWidth: "100%" }} />
+                                ))}
+                            </div>
+                        )}
                     </>
                 )}
 

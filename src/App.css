@@ -8,7 +8,10 @@
   position: fixed;
   font-size: 30px;
   color: black;
-  top: 20px;
+  top: 0px;
+  padding: 10px;
   margin: 0 auto;
   text-align: center;
+  width: 100%;
+  background-color: #92ccff;
 }
