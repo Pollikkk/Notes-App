@@ -1,8 +1,16 @@
 import { useNote } from '../context/NoteContext'
+import TextEditor from './TextEditor'
 import './CurrentNote.css'
 
 function CurrentNote({onClick}) {
     const {newNote, setNewNote, setIsOpenNewNote, addNote} = useNote()
+
+    const removeAddedImage = (index) => {
+        setNewNote(prev => ({
+            ...prev,
+            images: prev.images.filter((_, i) => i !== index)
+        }));
+    };
 
     const readAsDataURL = (file) =>
         new Promise((resolve, reject) => {
@@ -40,24 +48,33 @@ function CurrentNote({onClick}) {
                       value={newNote.title}
                       onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
                     />
-                    <textarea
+                    <TextEditor
+                      value={newNote.textHtml}
+                      onChange={(html) => setNewNote(prev => ({ ...prev, text: html }))}
+                      placeholder="Текст"
+                    />
+                    {/*<textarea
                       rows="4"
                       cols="50"
                       placeholder="Текст"
                       className='noteTextArea'
                       value={newNote.text}
                       onChange={(e) => setNewNote({ ...newNote, text: e.target.value })}
-                    />
+                    />*/}
                     <div className="imagesPreview">
                       {(newNote.images ?? []).map((src, i) => (
-                        <img key={i} src={src} alt="" style={{ maxWidth: 120, maxHeight: 120 }} />
+                        <div className="noteImg" key={i}>
+                            <img className="noteImg" key={i} src={src} alt="" style={{ maxWidth: 120, maxHeight: 120 }} />
+                            <button className="buttonDelImg" onClick={() => removeAddedImage(i)}>X</button>
+                        </div>
                       ))}
                     </div>
                     <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImagesPick}
+                        className='inputImg'
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImagesPick}
                     />
                     <button 
                         className='noteAddButton' 

@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
+import TextEditor from './TextEditor'
 import { useNote } from '../context/NoteContext'
 import './Note.css'
 
@@ -60,7 +61,7 @@ function Note({CurNote}) {
     return(
         <>
             <div ref={noteRef} className="oneNote" onClick={handleEdit}>
-                <button className='buttonDelNote' onClick={() => deleteNote(CurNote.id)}>DEL</button>
+                <button className='buttonDelNote' onClick={() => deleteNote(CurNote.id)}>X</button>
                 {isEditing ? (
                     <>
                         <input
@@ -69,18 +70,23 @@ function Note({CurNote}) {
                           value={editedText.title}
                           onChange={(e) => setEditedText(prev => ({...prev, title: e.target.value}))}
                         />
-                        <textarea
+                        {/*<textarea
                           rows="4"
                           cols="50"
                           className='noteTextArea'
                           value={editedText.text}
                           onChange={(e) => setEditedText(prev => ({...prev, text: e.target.value}))}
+                        />*/}
+                        <TextEditor
+                          value={editedText.text}
+                          onChange={(html) => setEditedText(prev => ({ ...prev, text: html }))}
                         />
+
                         <div className="noteImages">
                             {(editedText.images ?? []).map((src, i) => (
-                                <div key={i}>
+                                <div className="noteImg" key={i}>
                                     <img src={src} alt="" style={{ maxWidth: 160 }} />
-                                    <button onClick={() => removeEditedImage(i)}>Удалить</button>
+                                    <button className="buttonDelImg" onClick={() => removeEditedImage(i)}>X</button>
                                 </div>
                             ))}
                         </div>
@@ -89,7 +95,8 @@ function Note({CurNote}) {
                 ) : (
                     <>
                         <div className="oneNoteTitle">{CurNote.title}</div>
-                        <div className="oneNoteText">{CurNote.text}</div>
+                        <div className="oneNoteText" dangerouslySetInnerHTML={{ __html: CurNote.text ?? "" }} />
+                        {/*<div className="oneNoteText">{CurNote.text}</div>*/}
                         {(CurNote.images ?? []).length > 0 && (
                             <div className="noteImages">
                                 {CurNote.images.map((src, i) => (

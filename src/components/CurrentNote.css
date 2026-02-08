@@ -45,3 +45,24 @@
 .noteAddButton:hover{
     background-color: rgb(67, 113, 187);
 }
+
+.noteImg{
+    position: relative;
+}
+
+.buttonDelImg{
+    position: absolute;
+    top: -0.5vw;
+    right: 2.5vw;
+    border: solid 2px rgb(0, 0, 0);
+    border-radius: 5px;
+    background-color: rgb(40, 96, 188);
+    padding: 2px;
+    height: 2vw;
+    width: 2vw;
+    cursor: pointer;
+}
+
+.buttonDelImg:hover{
+    background-color: rgb(67, 113, 187);
+}

@@ -7,7 +7,6 @@ import CurrentNote from './components/CurrentNote'
 import NotesField from './components/NotesField'
 
 function App() {
-  console.log("useNotes is", useNotes);
   const [notes, setNotes] = useNotes();
 
   const [newNote, setNewNote] = useState({title: "", text: "", images: []})
