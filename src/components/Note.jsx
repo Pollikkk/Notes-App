@@ -3,7 +3,7 @@ import { useNote } from '../context/NoteContext'
 import './Note.css'
 
 function Note({CurNote}) {
-    const {updateNote} = useNote()
+    const {updateNote, deleteNote} = useNote()
     const noteRef = useRef(null);
 
     const [isEditing, setIsEditing] = useState(false);
@@ -34,7 +34,8 @@ function Note({CurNote}) {
 
     return(
         <>
-            <div ref={noteRef} className="oneNote" onClick={handleEdit}> 
+            <div ref={noteRef} className="oneNote" onClick={handleEdit}>
+                <button className='buttonDelNote' onClick={() => deleteNote(CurNote.id)}>DEL</button>
                 {isEditing ? (
                     <>
                         <input

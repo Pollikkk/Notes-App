@@ -7,14 +7,28 @@
     max-height: 85vh;
     overflow: auto;
     cursor: pointer;
+    color: black;
 }
 
 .noteTitleArea{
     width: 100%;
     background-color: #a6a6a6;
+    font-weight: bold;
 }
 
 .noteTextArea{
     width: 100%;
     background-color: #a6a6a6;
+}
+
+.buttonDelNote{
+    border: solid 2px rgb(0, 0, 0);
+    border-radius: 5px;
+    background-color: rgb(40, 96, 188);
+    padding: 10px;
+    cursor: pointer;
+}
+
+.oneNoteTitle{
+    font-weight: bold;
 }

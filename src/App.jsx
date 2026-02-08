@@ -1,13 +1,15 @@
 import { useMemo, useState } from 'react'
 import { NoteContext } from './context/NoteContext'
-import './useNoteState'
+import { useNotes } from './useNoteState'
 import './App.css'
 import AddButton from './components/AddButton'
 import CurrentNote from './components/CurrentNote'
 import NotesField from './components/NotesField'
 
 function App() {
-  const [notes, setNotes] = useState([])
+  console.log("useNotes is", useNotes);
+  const [notes, setNotes] = useNotes();
+
   const [newNote, setNewNote] = useState({title: "", text: ""})
   const [isOpenNewNote, setIsOpenNewNote] = useState(false)
 

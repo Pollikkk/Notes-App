@@ -9,6 +9,8 @@
 }
 
 .note{
+    box-sizing: border-box;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -23,10 +25,13 @@
 
 .noteTitleArea{
     border: none;
+    box-sizing: border-box;
+    font-weight: bold;
 }
 
 .noteTextArea{
     border: none;
+    box-sizing: border-box;
 }
 
 .noteAddButton{
