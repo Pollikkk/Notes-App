@@ -1,0 +1,20 @@
+.oneNote{
+    padding: 20px;
+    background-color: #a6a6a6;
+    border: solid 2px rgb(0, 0, 0);
+    border-radius: 10px;
+    width: min(200px, 40vw);
+    max-height: 85vh;
+    overflow: auto;
+    cursor: pointer;
+}
+
+.noteTitleArea{
+    width: 100%;
+    background-color: #a6a6a6;
+}
+
+.noteTextArea{
+    width: 100%;
+    background-color: #a6a6a6;
+}

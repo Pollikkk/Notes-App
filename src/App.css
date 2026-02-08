@@ -1,0 +1,14 @@
+.AppClass{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.AppName{
+  position: fixed;
+  font-size: 30px;
+  color: black;
+  top: 20px;
+  margin: 0 auto;
+  text-align: center;
+}
