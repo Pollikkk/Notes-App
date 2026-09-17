@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addNote } from './storage/notesSlice'
 import { useState } from 'react'
 import './App.css'
@@ -8,6 +8,9 @@ import NotesField from './components/NotesField'
 
 function App() {
   const dispatch = useDispatch()
+
+  //const notes = useSelector((state) => state.notes.notes);
+  //console.log('App render, notes:', notes);
 
   //const [notes, setNotes] = useNotes();
 
