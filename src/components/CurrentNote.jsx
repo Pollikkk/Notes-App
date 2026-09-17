@@ -1,9 +1,8 @@
-import { useNote } from '../context/NoteContext'
 import TextEditor from './TextEditor'
 import './CurrentNote.css'
 
-function CurrentNote({onClick}) {
-    const {newNote, setNewNote, setIsOpenNewNote, addNote} = useNote()
+function CurrentNote({newNote, setNewNote, onClose, onAdd}) {
+    console.log('CurrentNote render, newNote:', newNote);
 
     const removeAddedImage = (index) => {
         setNewNote(prev => ({
@@ -22,24 +21,32 @@ function CurrentNote({onClick}) {
 
     const handleImagesPick = async (e) => {
         const files = Array.from(e.target.files ?? []);
+        console.log('Selected files:', files);
+
         if (!files.length) return;
 
-        const MAX_MB = 0.3;
-        const okFiles = files.filter(f => f.size <= MAX_MB * 1024 * 1024);
+        try {
+          const dataUrls = await Promise.all(files.map(readAsDataURL));
+          console.log('dataUrls:', dataUrls);
 
-        const dataUrls = await Promise.all(okFiles.map(readAsDataURL));
+          setNewNote(prev => {
+            const next = {
+              ...prev,
+              images: [...(prev.images ?? []), ...dataUrls],
+            };
+            console.log('setNewNote next:', next);
+            return next;
+          });
+        } catch (err) {
+          console.error('Images load error:', err);
+        }
 
-        setNewNote(prev => ({
-            ...prev,
-            images: [...(prev.images ?? []), ...dataUrls],
-        }));
-
-        e.target.value = "";
+        e.target.value = '';
     };
 
     return (
         <>
-            <div className="noteBackground" onClick={onClick}>
+            <div className="noteBackground" onClick={onClose}>
                 <div className="note" onClick={(e) => e.stopPropagation()}>
                     <input
                       type="text"
@@ -49,18 +56,10 @@ function CurrentNote({onClick}) {
                       onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
                     />
                     <TextEditor
-                      value={newNote.textHtml}
+                      value={newNote.text}
                       onChange={(html) => setNewNote(prev => ({ ...prev, text: html }))}
                       placeholder="Текст"
                     />
-                    {/*<textarea
-                      rows="4"
-                      cols="50"
-                      placeholder="Текст"
-                      className='noteTextArea'
-                      value={newNote.text}
-                      onChange={(e) => setNewNote({ ...newNote, text: e.target.value })}
-                    />*/}
                     <div className="imagesPreview">
                       {(newNote.images ?? []).map((src, i) => (
                         <div className="noteImg" key={i}>
@@ -78,10 +77,7 @@ function CurrentNote({onClick}) {
                     />
                     <button 
                         className='noteAddButton' 
-                        onClick={() => {
-                            addNote(); 
-                            setIsOpenNewNote(prev => !prev)
-                        }}>
+                        onClick={onAdd}>
                         Добавить
                     </button>
                 </div>

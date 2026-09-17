@@ -1,15 +1,31 @@
+import { useDispatch } from 'react-redux'
+import { updateNote, deleteNote } from '../storage/notesSlice'
 import { useRef, useEffect, useState } from 'react'
 import TextEditor from './TextEditor'
-import { useNote } from '../context/NoteContext'
 import './Note.css'
 
-function Note({CurNote}) {
-    const {updateNote, deleteNote} = useNote()
+function Note({ CurNote }) {
+    const dispatch = useDispatch()
+
+    const handleDeleteNote = (id) => {
+        dispatch(deleteNote(id))
+    }
+
+    const handleUpdateNote = (id, newTitle, newText, newImages) => {
+        dispatch(
+            updateNote({
+                id,
+                title: newTitle,
+                text: newText,
+                images: newImages
+            }))
+    }
+
     const noteRef = useRef(null);
 
     const [isEditing, setIsEditing] = useState(false);
     const [editedText, setEditedText] = useState({
-        title: CurNote.title, 
+        title: CurNote.title,
         text: CurNote.text,
         images: CurNote.images ?? []
     });
@@ -21,11 +37,11 @@ function Note({CurNote}) {
             const fr = new FileReader();
             fr.onload = () => resolve(fr.result);
             fr.onerror = reject;
-            fr.readAsDataURL(file); 
+            fr.readAsDataURL(file);
         });
 
     const handleSave = () => {
-        updateNote(CurNote.id, editedText.title, editedText.text, editedText.images)
+        handleUpdateNote(CurNote.id, editedText.title, editedText.text, editedText.images)
         setIsEditing(false)
     };
 
@@ -46,10 +62,10 @@ function Note({CurNote}) {
     };
 
     useEffect(() => {
-        if(!isEditing) return
+        if (!isEditing) return
 
         const handleDocMouseDown = (e) => {
-            if(noteRef.current && !noteRef.current.contains(e.target)){
+            if (noteRef.current && !noteRef.current.contains(e.target)) {
                 handleSave()
             }
         }
@@ -58,28 +74,21 @@ function Note({CurNote}) {
         return () => document.removeEventListener("mousedown", handleDocMouseDown)
     }, [isEditing, editedText])
 
-    return(
+    return (
         <>
             <div ref={noteRef} className="oneNote" onClick={handleEdit}>
-                <button className='buttonDelNote' onClick={() => deleteNote(CurNote.id)}>X</button>
+                <button className='buttonDelNote' onClick={() => handleDeleteNote(CurNote.id)}>X</button>
                 {isEditing ? (
                     <>
                         <input
-                          type="text"
-                          className='noteTitleArea'
-                          value={editedText.title}
-                          onChange={(e) => setEditedText(prev => ({...prev, title: e.target.value}))}
+                            type="text"
+                            className='noteTitleArea'
+                            value={editedText.title}
+                            onChange={(e) => setEditedText(prev => ({ ...prev, title: e.target.value }))}
                         />
-                        {/*<textarea
-                          rows="4"
-                          cols="50"
-                          className='noteTextArea'
-                          value={editedText.text}
-                          onChange={(e) => setEditedText(prev => ({...prev, text: e.target.value}))}
-                        />*/}
                         <TextEditor
-                          value={editedText.text}
-                          onChange={(html) => setEditedText(prev => ({ ...prev, text: html }))}
+                            value={editedText.text}
+                            onChange={(html) => setEditedText(prev => ({ ...prev, text: html }))}
                         />
 
                         <div className="noteImages">
@@ -96,7 +105,6 @@ function Note({CurNote}) {
                     <>
                         <div className="oneNoteTitle">{CurNote.title}</div>
                         <div className="oneNoteText" dangerouslySetInnerHTML={{ __html: CurNote.text ?? "" }} />
-                        {/*<div className="oneNoteText">{CurNote.text}</div>*/}
                         {(CurNote.images ?? []).length > 0 && (
                             <div className="noteImages">
                                 {CurNote.images.map((src, i) => (

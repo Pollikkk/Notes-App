@@ -1,9 +1,11 @@
-import { useNote } from '../context/NoteContext'
+import { useSelector } from 'react-redux'
+
 import Note from './Note'
 import './NotesField.css'
 
 function NotesField() {
-    const {notes} = useNote()
+    const notes = useSelector(state => state.notes.notes)
+    console.log(notes)
     return(
         <>
             <div className='notesField'>
