@@ -14,28 +14,28 @@ function App() {
 
   //const [notes, setNotes] = useNotes();
 
-  const [newNote, setNewNote] = useState({ 
-    title: "", 
-    text: "", 
-    images: [] 
+  const [newNote, setNewNote] = useState({
+    title: "",
+    text: "",
+    images: []
   })
   const [isOpenNewNote, setIsOpenNewNote] = useState(false)
 
   const handleAddNote = () => {
-    if (newNote.title && newNote.text) {
+    if (newNote.title || newNote.text) {
       const id = Date.now().toString()
       dispatch(
         addNote({
-          id, 
+          id,
           title: newNote.title,
           text: newNote.text,
           images: newNote.images
         }))
     }
-    setNewNote({ 
-      title: "", 
-      text: "", 
-      images: [] 
+    setNewNote({
+      title: "",
+      text: "",
+      images: []
     })
     setIsOpenNewNote(false)
   }
